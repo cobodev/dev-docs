@@ -1,0 +1,24 @@
+{
+  "name": "dev-docs",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js"
+  },
+  "bin": {
+    "create-dev-docs": "./dist/index.js"
+  },
+  "author": "cobodev",
+  "license": "ISC",
+  "description": "A simple way to build technical documentation.",
+  "dependencies": {
+    "@inquirer/prompts": "^7.9.0",
+    "chalk": "^4.1.2"
+  },
+  "devDependencies": {
+    "@types/inquirer": "^9.0.9",
+    "@types/node": "^24.9.1",
+    "typescript": "^5.9.3"
+  }
+}
