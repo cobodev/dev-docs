@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import { bold, error, success } from './messages';
-import { askDefaultModules, askProjectName, chooseModule } from './prompts';
-import { copyFile, createDirectory, getModules, getParametersFromFile, isEmptyPath, pathExists, replaceInFile } from './utils';
+import { askDefaultModules, askParameters, askProjectName, chooseModule } from './prompts';
+import { addDocLinkToIndex, addModuleLink, copyFile, createDirectory, getModules, getParametersFromFile, isEmptyPath, pathExists, replaceInFile } from './utils';
 
 const CURRENT_PATH = './'
 const DEFAULTS_PATH = `${__dirname}/../defaults`
@@ -34,7 +34,7 @@ const init = async (): Promise<void> => {
       // Mover los templates dentro de la carpeta templates
       copyFile(`${DEFAULTS_PATH}/${mod}/template.md`, `${CURRENT_PATH}/templates/${mod}_template.md`)
       // Añadir al index.md el indice con los modulos
-
+      addModuleLink(`${CURRENT_PATH}/index.md`, mod);
     }
   } else {
     // Comprobaciones previas
@@ -51,14 +51,18 @@ const init = async (): Promise<void> => {
     const selectedModule = await chooseModule(modules)
   
     // Resto de preguntas (titulo, ...)
-    // getParametersFromFile(``)
+    const parameters = getParametersFromFile(`${CURRENT_PATH}/templates/${selectedModule}_template.md`)
+    const answers = await askParameters(parameters)
+    console.log(answers)
+
     const code = '12345'
     const title = 'hola adios jaja'
     // Creación del .md
     copyFile(`${CURRENT_PATH}/templates/${selectedModule}_template.md`, `${CURRENT_PATH}/${selectedModule}/${code}_${title.replace(' ', '-')}.md`)
     // Sustitución de los parámetros
-
+    replaceInFile(`${CURRENT_PATH}/${selectedModule}/${code}_${title.replace(' ', '-')}.md`, answers);
     // Edición del index.md correspondiente
+    addDocLinkToIndex(`${CURRENT_PATH}/index.md`, `${selectedModule}/${code}_${title.replace(' ', '-')}.md`)
   }
 
 }

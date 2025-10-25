@@ -20,3 +20,18 @@ export const chooseModule = async (modules: string[]) => {
     choices: modules.map(m => ({ value: m, name: m }))
   });
 }
+
+const askForParameter = async (parameter: string) => {
+  return await input({
+    message: `${parameter}:`,
+    validate: (input) => input && input != ''
+  });
+}
+
+export const askParameters = async (parameters: string[]) => {
+  const answers: { [key: string]: string } = {};
+  for (const param of parameters) {
+    answers[param] = await askForParameter(param);
+  }
+  return answers;
+}

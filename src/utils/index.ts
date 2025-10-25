@@ -89,3 +89,25 @@ export const getParametersFromFile = (filePath: string): string[] => {
     return [];
   }
 }
+
+export const addModuleLink = (indexPath: string, moduleName: string): void => {
+  try {
+    let content = fs.readFileSync(indexPath, 'utf-8');
+    const linkLine = `\n- [${moduleName}](./${moduleName}/index.md)\n`;
+    content = content + linkLine;
+    fs.writeFileSync(indexPath, content, 'utf-8');
+  } catch (error) {
+    console.error('Error creating module link:', error);
+  }
+}
+
+export const addDocLinkToIndex = (indexPath: string, docName: string): void => {
+  try {
+    let content = fs.readFileSync(indexPath, 'utf-8');
+    const linkLine = `\n- [${docName}](./${docName}.md)\n`;
+    content = content + linkLine;
+    fs.writeFileSync(indexPath, content, 'utf-8');
+  } catch (error) {
+    console.error('Error adding doc link to index:', error);
+  }
+}
