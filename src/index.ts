@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+// TODO: Refactorizar todo este archivo en comandos separados
 import { bold, error, success } from './messages';
 import { askDefaultModules, askParameters, askProjectName, chooseModule } from './prompts';
 import { addDocLinkToIndex, addModuleLink, copyFile, createDirectory, getModules, getParametersFromFile, isEmptyPath, pathExists, replaceInFile } from './utils';
