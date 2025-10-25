@@ -57,3 +57,35 @@ export const createDirectory = (dir: string, name: string) => {
     throw error;
   }
 }
+
+export const replaceInFile = (filePath: string, replacements: { [key: string]: string }) => {
+  try {
+    let content = fs.readFileSync(filePath, 'utf-8');
+    
+    for (const [key, value] of Object.entries(replacements)) {
+      const regex = new RegExp(`{{${key}}}`, "g");
+      content = content.replace(regex, value);
+    }
+
+    fs.writeFileSync(filePath, content, 'utf-8');
+  } catch (error) {
+    console.error('Error replacing in file:', error);
+    // throw error
+  }
+}
+
+export const getParametersFromFile = (filePath: string): string[] => {
+  try {
+    const content = fs.readFileSync(filePath, 'utf-8');
+    const regex = /{{(.*?)}}/g;
+    const parameters = new Set<string>();
+    let match;
+    while ((match = regex.exec(content)) !== null) {
+      parameters.add(match[1]);
+    }
+    return Array.from(parameters);
+  } catch (error) {
+    console.error('Error getting parameters from file:', error);
+    return [];
+  }
+}

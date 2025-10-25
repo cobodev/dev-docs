@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import { bold, error, success } from './messages';
 import { askDefaultModules, askProjectName, chooseModule } from './prompts';
-import { copyFile, createDirectory, getModules, isEmptyPath, pathExists } from './utils';
+import { copyFile, createDirectory, getModules, getParametersFromFile, isEmptyPath, pathExists, replaceInFile } from './utils';
 
 const CURRENT_PATH = './'
 const DEFAULTS_PATH = `${__dirname}/../defaults`
@@ -18,9 +18,10 @@ const init = async (): Promise<void> => {
     const selectedModules = await askDefaultModules(modules)
     
     // Crear un index principal con los links de los modulos elegidos
-    copyFile(`${DEFAULTS_PATH}/index.md`, CURRENT_PATH)
+    copyFile(`${DEFAULTS_PATH}/index.md`, `${CURRENT_PATH}/index.md`)
 
     // Modificar el index con el nombre del proyecto
+    replaceInFile(`${CURRENT_PATH}/index.md`, { 'project name': projectName });
     
     // Crear una carpeta templates
     createDirectory(CURRENT_PATH, 'templates')
@@ -32,6 +33,8 @@ const init = async (): Promise<void> => {
       copyFile(`${DEFAULTS_PATH}/${mod}/index.md`, `${CURRENT_PATH}/${mod}/index.md`)
       // Mover los templates dentro de la carpeta templates
       copyFile(`${DEFAULTS_PATH}/${mod}/template.md`, `${CURRENT_PATH}/templates/${mod}_template.md`)
+      // Añadir al index.md el indice con los modulos
+
     }
   } else {
     // Comprobaciones previas
@@ -48,6 +51,7 @@ const init = async (): Promise<void> => {
     const selectedModule = await chooseModule(modules)
   
     // Resto de preguntas (titulo, ...)
+    // getParametersFromFile(``)
     const code = '12345'
     const title = 'hola adios jaja'
     // Creación del .md
