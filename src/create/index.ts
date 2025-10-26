@@ -1,5 +1,5 @@
 import { Command } from "commander";
-import { addDocLinkToIndex, copyFile, getModules, getParametersFromFile, pathExists, replaceInFile, sanitizeFileName } from "../utils";
+import { addDocLinkToIndex, copyFile, getAutoAnswers, getModules, getParametersFromFile, pathExists, replaceInFile, sanitizeFileName } from "../utils";
 import { askParameters, chooseModule } from "../prompts";
 import { error } from "../messages";
 
@@ -34,7 +34,6 @@ export const createCommand = new Command("create")
       parameters.unshift('title')
     }
     const answers = await askParameters(parameters)
-    console.log(answers)
 
     // TODO: Investigar forma de configurar que parámetros conformarán el nombre del fichero
     const fileName = sanitizeFileName(answers['title'] || 'untitled')
@@ -45,4 +44,8 @@ export const createCommand = new Command("create")
     replaceInFile(`${CURRENT_PATH}/${selectedModule}/${fileName}.md`, answers);
     // Edición del index.md correspondiente
     addDocLinkToIndex(`${CURRENT_PATH}/${selectedModule}/index.md`, `${fileName}.md`, answers['title'] || 'untitled')
+    // Parametros automáticos
+    const autoParameters = getParametersFromFile(`${CURRENT_PATH}/${selectedModule}/${fileName}.md`, true)
+    const autoAnswers: { [key: string]: string } = getAutoAnswers(autoParameters)
+    replaceInFile(`${CURRENT_PATH}/${selectedModule}/${fileName}.md`, autoAnswers, true);
 });

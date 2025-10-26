@@ -1,5 +1,5 @@
 import { Command } from "commander";
-import { addModuleLink, copyFile, createDirectory, createFile, getBlockFromFile, getModules, getParametersFromFile, isEmptyPath, replaceInFile } from "../utils";
+import { addModuleLink, copyFile, createDirectory, createFile, getAutoAnswers, getBlockFromFile, getModules, getParametersFromFile, isEmptyPath, replaceInFile } from "../utils";
 import { askDefaultModules, askParameters, askProjectName } from "../prompts";
 
 const CURRENT_PATH = './'
@@ -20,6 +20,11 @@ export const initCommand = new Command("init")
       const parameters = getParametersFromFile(`${CURRENT_PATH}/index.md`)
       const answers = await askParameters(parameters)
       replaceInFile(`${CURRENT_PATH}/index.md`, answers);
+
+      // Modificar el index con los parámetros automáticos
+      const autoParameters = getParametersFromFile(`${CURRENT_PATH}/index.md`, true)
+      const autoAnswers: { [key: string]: string } = getAutoAnswers(autoParameters)
+      replaceInFile(`${CURRENT_PATH}/index.md`, autoAnswers, true);
       
       // Crear una carpeta templates
       createDirectory(CURRENT_PATH, 'templates')

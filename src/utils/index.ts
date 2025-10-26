@@ -59,12 +59,15 @@ export const createDirectory = (dir: string, name: string): void => {
   }
 };
 
-export const replaceInFile = (filePath: string, replacements: { [key: string]: string }) => {
+export const replaceInFile = (filePath: string, replacements: { [key: string]: string }, auto: boolean = false) => {
   try {
     let content = fs.readFileSync(filePath, 'utf-8');
     
     for (const [key, value] of Object.entries(replacements)) {
-      const regex = new RegExp(`{{${key}}}`, "g");
+      let regex = new RegExp(`{{${key}}}`, "g");
+      if (auto) {
+        regex = new RegExp(`{{@${key}}}`, "g");
+      }
       content = content.replace(regex, value);
     }
 
@@ -75,10 +78,13 @@ export const replaceInFile = (filePath: string, replacements: { [key: string]: s
   }
 }
 
-export const getParametersFromFile = (filePath: string): string[] => {
+export const getParametersFromFile = (filePath: string, auto: boolean = false): string[] => {
   try {
     const content = fs.readFileSync(filePath, 'utf-8');
-    const regex = /{{(?!@)(.*?)}}/g;
+    let regex = /{{(?!@)(.*?)}}/g;
+    if (auto) {
+      regex = /{{@(.*?)}}/g;
+    }
     const parameters = new Set<string>();
     let match;
     while ((match = regex.exec(content)) !== null) {
@@ -146,4 +152,24 @@ export const sanitizeFileName = (name: string): string => {
     .trim()                                 // elimina espacios al inicio/fin
     .replace(/\s+/g, '-')                   // espacios → guiones bajos
     .replace(/_+/g, '-'); 
+}
+
+export const getAutoAnswers = (parameters: string[]): { [key: string]: string } => {
+  const answers: { [key: string]: string } = {}
+  console.log('Auto parameters:', parameters)
+  parameters.forEach(param => {
+    if (param === 'date') {
+      answers[param] = new Date().toISOString().split('T')[0]
+    }
+    if (param === 'year') {
+      answers[param] = new Date().getFullYear().toString()
+    }
+    if (param === 'lastUpdated') {
+      answers[param] = new Date().toISOString().split('T')[0]
+    }
+    if (param === 'location') {
+      answers[param] = 'test'
+    }
+  })
+  return answers
 }

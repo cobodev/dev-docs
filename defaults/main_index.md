@@ -1,7 +1,6 @@
 # {{projectName}}
 
 **Developed by:** {{teamName}}
-<!-- TODO: Separar parámetros que se preguntan de parámetros automáticos -->
 **Last updated:** {{@lastUpdated}}
 
 ---
