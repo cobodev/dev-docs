@@ -41,6 +41,15 @@ export const copyFile = (sourceDir: string, destinationDir: string) => {
   }
 }
 
+export const createFile = (filePath: string, content: string = ''): void => {
+  try {
+    fs.writeFileSync(filePath, content, 'utf-8');
+  } catch (error) {
+    console.error(`Error creating file at ${filePath}: ${error}`);
+    throw error;
+  }
+}
+
 export const createDirectory = (dir: string, name: string): void => {
   try {
     fs.mkdirSync(path.join(dir, name));
@@ -69,7 +78,7 @@ export const replaceInFile = (filePath: string, replacements: { [key: string]: s
 export const getParametersFromFile = (filePath: string): string[] => {
   try {
     const content = fs.readFileSync(filePath, 'utf-8');
-    const regex = /{{(.*?)}}/g;
+    const regex = /{{(?!@)(.*?)}}/g;
     const parameters = new Set<string>();
     let match;
     while ((match = regex.exec(content)) !== null) {
@@ -85,21 +94,56 @@ export const getParametersFromFile = (filePath: string): string[] => {
 export const addModuleLink = (indexPath: string, moduleName: string): void => {
   try {
     let content = fs.readFileSync(indexPath, 'utf-8');
-    const linkLine = `\n- [${moduleName}](./${moduleName}/index.md)\n`;
-    content = content + linkLine;
+    const marker = '<!-- MODULES -->';
+    const linkLine = `- [${moduleName}](./${moduleName}/index.md)\n`;
+
+    if (content.includes(marker)) {
+      // Insert the link right after the marker
+      content = content.replace(marker, `${marker}\n${linkLine}`);
+    } else {
+      // If the marker is missing, append it at the end
+      console.warn(`Marker not found in ${indexPath}. Appending link at the end.`);
+      content += `\n${marker}\n${linkLine}`;
+    }
+
     fs.writeFileSync(indexPath, content, 'utf-8');
+    console.log(`✅ Added link for module "${moduleName}" to ${indexPath}`);
   } catch (error) {
-    console.error('Error creating module link:', error);
+    console.error('❌ Error creating module link:', error);
   }
 }
 
-export const addDocLinkToIndex = (indexPath: string, docName: string): void => {
+export const addDocLinkToIndex = (indexPath: string, docName: string, title: string): void => {
   try {
     let content = fs.readFileSync(indexPath, 'utf-8');
-    const linkLine = `\n- [${docName}](./${docName}.md)\n`;
+    const linkLine = `\n- [${title}](./${docName})\n`;
     content = content + linkLine;
     fs.writeFileSync(indexPath, content, 'utf-8');
   } catch (error) {
     console.error('Error adding doc link to index:', error);
   }
+}
+
+export const getBlockFromFile = (filePath: string, moduleName: string): string => {
+  try {
+    const marker = moduleName.toUpperCase();
+    const content = fs.readFileSync(filePath, 'utf-8');
+    const regex = new RegExp(`<!-- ${marker} START -->([\\s\\S]*?)<!-- ${marker} END -->`, 'g');
+    const match = regex.exec(content);
+    return match ? match[1].trim() : '';
+  } catch (error) {
+    console.error(`Error getting block from file ${filePath}:`, error);
+    return '';
+  }
+}
+
+export const sanitizeFileName = (name: string): string => {
+  return name
+    .toLowerCase()                          // todo en minúsculas
+    .normalize('NFD')                       // separa acentos de las letras
+    .replace(/[\u0300-\u036f]/g, '')        // elimina acentos
+    .replace(/[^a-z0-9\s_-]/g, '')          // elimina caracteres no válidos
+    .trim()                                 // elimina espacios al inicio/fin
+    .replace(/\s+/g, '-')                   // espacios → guiones bajos
+    .replace(/_+/g, '-'); 
 }

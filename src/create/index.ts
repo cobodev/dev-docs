@@ -1,5 +1,5 @@
 import { Command } from "commander";
-import { addDocLinkToIndex, copyFile, getModules, getParametersFromFile, pathExists, replaceInFile } from "../utils";
+import { addDocLinkToIndex, copyFile, getModules, getParametersFromFile, pathExists, replaceInFile, sanitizeFileName } from "../utils";
 import { askParameters, chooseModule } from "../prompts";
 import { error } from "../messages";
 
@@ -30,15 +30,19 @@ export const createCommand = new Command("create")
   
     // Resto de preguntas (titulo, ...)
     const parameters = getParametersFromFile(`${CURRENT_PATH}/templates/${selectedModule}_template.md`)
+    if (!parameters.find(param => param === 'title')) {
+      parameters.unshift('title')
+    }
     const answers = await askParameters(parameters)
     console.log(answers)
 
-    const code = '12345'
-    const tit = 'hola adios jaja'
+    // TODO: Investigar forma de configurar que parámetros conformarán el nombre del fichero
+    const fileName = sanitizeFileName(answers['title'] || 'untitled')
+
     // Creación del .md
-    copyFile(`${CURRENT_PATH}/templates/${selectedModule}_template.md`, `${CURRENT_PATH}/${selectedModule}/${code}_${tit.replace(' ', '-')}.md`)
+    copyFile(`${CURRENT_PATH}/templates/${selectedModule}_template.md`, `${CURRENT_PATH}/${selectedModule}/${fileName}.md`)
     // Sustitución de los parámetros
-    replaceInFile(`${CURRENT_PATH}/${selectedModule}/${code}_${tit.replace(' ', '-')}.md`, answers);
+    replaceInFile(`${CURRENT_PATH}/${selectedModule}/${fileName}.md`, answers);
     // Edición del index.md correspondiente
-    addDocLinkToIndex(`${CURRENT_PATH}/index.md`, `${selectedModule}/${code}_${tit.replace(' ', '-')}.md`)
+    addDocLinkToIndex(`${CURRENT_PATH}/${selectedModule}/index.md`, `${fileName}.md`, answers['title'] || 'untitled')
 });
