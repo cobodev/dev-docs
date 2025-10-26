@@ -1,4 +1,4 @@
-import { checkbox, confirm, input, search, select } from "@inquirer/prompts";
+import { checkbox, input, select } from "@inquirer/prompts";
 
 export const askProjectName = async () => {
   return await input({

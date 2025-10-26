@@ -5,6 +5,9 @@ import { askDefaultModules, askProjectName } from "../prompts";
 const CURRENT_PATH = './'
 const DEFAULTS_PATH = `${__dirname}/../defaults`
 
+// TODO: Lista de parametros excepcionados que se rellenan automáticamente (lastUpdated, year, ...)
+// TODO: Buscar <!-- MODULES --> en el index.md para añadir los modulos ahí
+
 export const initCommand = new Command("init")
   .description("Inicializa la estructura base de documentación")
   .action(async () => {

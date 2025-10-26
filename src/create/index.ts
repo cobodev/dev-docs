@@ -14,7 +14,7 @@ export const createCommand = new Command("create")
   .argument("[module]", "El módulo donde se creará la documentación")
   .argument("[title]", "El título de la documentación")
   .description("Crea un nuevo módulo de documentación")
-  .action(async (module?: string, title?: string) => {
+  .action(async (module?: string) => {
     // Comprobaciones previas
     const existIndex = pathExists(`${CURRENT_PATH}/index.md`)
     const existTemplatesFolder = pathExists(`${CURRENT_PATH}/templates`)

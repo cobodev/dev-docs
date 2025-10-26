@@ -21,23 +21,14 @@ export const pathExists = (dir: string): boolean => {
 
 export const getModules = (dir: string): string[] => {
   try {
-
     const items = fs.readdirSync(dir);
-
-    const directoryNames = [];
-    for (const item of items) {
-        const itemPath = path.join(dir, item);
-        const stats = fs.statSync(itemPath);
-
-        if (stats.isDirectory() && item !== 'templates') {
-            directoryNames.push(item);
-        }
-    }
-
-    return directoryNames;
-
+    return items.filter(item => {
+      const itemPath = path.join(dir, item);
+      const stats = fs.statSync(itemPath);
+      return stats.isDirectory() && item !== 'templates';
+    });
   } catch (error) {
-    // throw error
+    console.error(`Error getting modules: ${error}`);
     return [];
   }
 }
@@ -50,13 +41,14 @@ export const copyFile = (sourceDir: string, destinationDir: string) => {
   }
 }
 
-export const createDirectory = (dir: string, name: string) => {
+export const createDirectory = (dir: string, name: string): void => {
   try {
-    fs.mkdirSync(`${dir}/${name}`);
+    fs.mkdirSync(path.join(dir, name));
   } catch (error) {
+    console.error(`Error creating directory ${name} in ${dir}: ${error}`);
     throw error;
   }
-}
+};
 
 export const replaceInFile = (filePath: string, replacements: { [key: string]: string }) => {
   try {
