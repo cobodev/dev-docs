@@ -1,4 +1,10 @@
-import { select } from "@inquirer/prompts";
+import { input, select } from "@inquirer/prompts";
+
+export const askModuleName = async () => {
+  return await input({
+    message: 'Enter the name of the new module: ',
+  });
+}
 
 export const chooseModule = async (modules: string[]) => {
   return await select({
