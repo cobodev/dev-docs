@@ -1,13 +1,13 @@
 {
   "name": "dev-docs",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "bin/cli.js",
   "scripts": {
     "build": "tsc",
-    "start": "node dist/bin/index.js"
+    "start": "node dist/bin/cli.js"
   },
   "bin": {
-    "devdocs": "./dist/bin/index.js"
+    "devdocs": "./dist/bin/cli.js"
   },
   "author": "cobodev",
   "license": "ISC",
@@ -15,7 +15,8 @@
   "dependencies": {
     "@inquirer/prompts": "^7.9.0",
     "chalk": "^4.1.2",
-    "commander": "^14.0.2"
+    "commander": "^14.0.2",
+    "dotenv": "^17.2.3"
   },
   "devDependencies": {
     "@types/inquirer": "^9.0.9",

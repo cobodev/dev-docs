@@ -1,7 +1,6 @@
 # {{projectName}}
 
 **Developed by:** {{teamName}}
-**Last updated:** {{@lastUpdated}}
 
 ---
 

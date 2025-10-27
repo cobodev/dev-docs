@@ -10,7 +10,7 @@ Each entry links to a detailed Markdown file describing the error.
 
 <!-- ERRORS END -->
 
-<!-- FEAUTURES START -->
+<!-- FEATURES START -->
 
 # 🧩 Features Index
 

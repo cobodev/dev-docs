@@ -1,0 +1,7 @@
+{
+  "defaultAuthor": "Unknown",
+  "params": {
+    "fixed": ["title"]
+  },
+  "availableModules": ["errors", "features", "guides", "issues"]
+}
