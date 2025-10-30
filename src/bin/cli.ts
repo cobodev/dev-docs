@@ -7,9 +7,7 @@ import { logger } from "../core/logger.js";
 
 const program = new Command();
 
-logger.info(`DevDocs CLI - Version ${config.version}`);
-logger.info(`Config Path: ${config.defaultsPath}`);
-logger.info(`Current Path: ${config.currentPath}`);
+logger.info("=========================================================");
 
 program
   .name("devdocs")

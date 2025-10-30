@@ -1,7 +1,8 @@
+import { logger } from "../core/logger";
 import { getContentFromFile, writeContentToFile } from "./fs";
 
 export const getUserParameters = (filePath: string) => {
-  const regex = /{{(?!@)(.*?)}}/g;
+  const regex = /{{(?!@)([a-zA-Z]+[a-zA-Z0-9_]*)}}/g;
   return getParameters(filePath, regex);
 }
 
@@ -20,7 +21,7 @@ const getParameters = (filePath: string, regex: RegExp) => {
     }
     return Array.from(parameters);
   } catch (error) {
-    console.error('Error getting parameters from file:', error);
+    logger.error('Error getting parameters from file.', error);
     return [];
   }
 }
@@ -47,8 +48,8 @@ const replaceParameters = (filePath: string, replacements: { [key: string]: stri
 
     writeContentToFile(filePath, content);
   } catch (error) {
-    console.error('Error replacing in file:', error);
-    // throw error
+    logger.error('Error replacing in file:', error);
+    throw error
   }
 }
 
@@ -60,12 +61,6 @@ export const getAutoAnswers = (parameters: string[]): { [key: string]: string } 
     }
     if (param === 'year') {
       answers[param] = new Date().getFullYear().toString()
-    }
-    if (param === 'lastUpdated') {
-      answers[param] = new Date().toISOString().split('T')[0]
-    }
-    if (param === 'location') {
-      answers[param] = 'test'
     }
   })
   return answers

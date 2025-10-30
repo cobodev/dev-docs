@@ -31,15 +31,6 @@ export const logger = {
   success: (msg: string) => {
     console.log(chalk.green(msg));
   },
-
-  /**
-   * Logs a title.
-   * 
-   * @param {string} msg - The title message to display.
-   */
-  title: (msg: string) => {
-    console.log(chalk.bold.cyan(`\n=== ${msg.toUpperCase()} ===`));
-  },
   
   /**
    * Returns a message formatted in bold text.

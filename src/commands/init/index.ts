@@ -4,43 +4,56 @@ import { chooseModules } from "./prompts";
 import { getAutoAnswers, getAutoParameters, getUserParameters, replaceAutoParameters, replaceUserParameters } from "../../utils/markdown";
 import { askParameters } from "../../core/prompts";
 import { config } from "../../core/config";
+import { logger } from "../../core/logger";
+import { exit } from "../../utils/process";
 
 export const runInit = async () => {
-  if (isEmptyPath(config.currentPath)) {
+  logger.info("Initializing a new documentation project...");
   
+  try {
+    if (!isEmptyPath(config.currentPath)) {
+      logger.error("The path is not empty. Please choose an empty directory to initialize the documentation project.");
+      exit()
+    }
+    
     // Ask for modules to include
     const modules = getAvailableModules()
-    console.log("Available modules:", modules)
     const selectedModules = await chooseModules(modules)
     
-    // Crear un index principal con los links de los modulos elegidos
+    logger.info('Creating main index');
+    // Create main index.md
     copyFile(`${config.defaultsPath}/templates/main_index.md`, `${config.currentPath}/index.md`)
 
-    // Modificar el index con los parámetros de usuario
+    // Modify index.md with user parameters
     const parameters = getUserParameters(`${config.currentPath}/index.md`)
     const answers = await askParameters(parameters)
     replaceUserParameters(`${config.currentPath}/index.md`, answers);
 
-    // Modificar el index con los parámetros automáticos
+    // Modify index.md with auto parameters
     const autoParameters = getAutoParameters(`${config.currentPath}/index.md`)
     const autoAnswers: { [key: string]: string } = getAutoAnswers(autoParameters)
     replaceAutoParameters(`${config.currentPath}/index.md`, autoAnswers);
     
-    // Crear una carpeta templates
+    // Create templates folder
     createDirectory(config.currentPath, 'templates')
 
+    logger.info('Creating modules...');
     for (let mod of selectedModules) {
-      // Crear una carpeta por cada modulo elegido
+      // Create a folder for each selected module
       createDirectory(config.currentPath, mod)
-      // Crear index dentro de cada modulo
+      // Create index.md inside each module
       const indexContent = getBlockFromFile(`${config.defaultsPath}/templates/modules_index.md`, mod);
       createFile(`${config.currentPath}/${mod}/index.md`, indexContent)
-      // Mover los templates dentro de la carpeta templates
+      // Move templates into the templates folder
       copyFile(`${config.defaultsPath}/templates/_TEMPLATE_${mod}.md`, `${config.currentPath}/templates/_TEMPLATE_${mod}.md`)
-      // Añadir al index.md el indice con los modulos
+      // Add module link to the main index.md
       addModuleLink(`${config.currentPath}/index.md`, mod);
     }
-  } else {
-    console.log("The directory should be empty")
+
+    logger.info("Documentation project initialized successfully.");
+    logger.info(`Don't forget to check the templates folder to add your content`);
+  
+  } catch (error) {
+    logger.error("Error during project initialization", error)
   }
 }

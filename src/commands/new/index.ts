@@ -10,72 +10,90 @@ import { exit } from "../../utils/process";
 import { addModuleLink } from "../init/utils";
 
 const newDoc = async () => {
-  logger.info("Creating a new document...");
-  // Comprobaciones previas
+logger.info("Creating a new document...");
+
+  // Validation of existing project
   const existIndex = pathExists(`${config.currentPath}/index.md`)
   const existTemplatesFolder = pathExists(`${config.currentPath}/templates`)
 
   if (!existIndex && !existTemplatesFolder) {
-    logger.error("No esta en la ruta correcta.");
+    logger.error("No documentation project found in the current directory. Please run 'devdocs init' first.");
     exit()
   }
 
-  // Preguntar que quiere crear (modulos)
+  // Ask module to add the document to
   const modules = getModules(config.currentPath)
   const selectedModule = await chooseModule(modules)
 
-  // Parametros de usuario
+  // User parameters
   const parameters = getUserParameters(`${config.currentPath}/templates/_TEMPLATE_${selectedModule}.md`)
-  // TODO: hacer esto con los fixed params
-  if (!parameters.find(param => param === 'title')) {
-    parameters.unshift('title')
+  
+  // Add fixed parameters if not present
+  const fixedParameters = config.fixedParams;
+  for (let fixedParam of fixedParameters) {
+    if (!parameters.find(param => param === fixedParam)) {
+      parameters.unshift(fixedParam)
+    }
   }
   const answers = await askParameters(parameters)
   
-  // Parametros automáticos
+  // Auto parameters
   const autoParameters = getAutoParameters(`${config.currentPath}/templates/_TEMPLATE_${selectedModule}.md`)
   const autoAnswers: { [key: string]: string } = getAutoAnswers(autoParameters)
+
+  if (!answers['title'] || answers['title'].trim() === '') {
+    logger.error("The 'title' parameter is required and cannot be empty.");
+    exit()
+  }
   
   // TODO: Investigar forma de configurar que parámetros conformarán el nombre del fichero
   const fileName = sanitizeFileName(answers['title'] || 'untitled')
   
-  
-  // Creación del .md
+  // Create the document from the template
   copyFile(`${config.currentPath}/templates/_TEMPLATE_${selectedModule}.md`, `${config.currentPath}/${selectedModule}/${fileName}.md`)
-  // Sustitución de los parámetros
+  // Replace parameters
   replaceUserParameters(`${config.currentPath}/${selectedModule}/${fileName}.md`, answers);
   replaceAutoParameters(`${config.currentPath}/${selectedModule}/${fileName}.md`, autoAnswers);
-  // Edición del index.md correspondiente
+  // Edit corresponding index.md
   addDocLinkToIndex(`${config.currentPath}/${selectedModule}/index.md`, `${fileName}.md`, answers['title'] || 'untitled')
 
-  logger.info("Document created successfully.");
+  logger.info(`Document created successfully => ${config.currentPath}/${selectedModule}/${fileName}.md.`);
+  logger.info(`Index updated => ${config.currentPath}/${selectedModule}/index.md.`);
+  logger.info(`Don't forget to edit the document to add your content.`);
 }
 
 const newModule = async () => {
-  console.log("Creating new module...");
-  // Preguntar nombre del módulo
-  const selectedModule = await askModuleName();
-  // Crear carpeta del módulo
-  createDirectory(config.currentPath, selectedModule);
-  // Crear index.md del módulo
-  const indexContent = '# ' + selectedModule + '\n\nWelcome to the ' + selectedModule + ' section.';
-  createFile(`${config.currentPath}/${selectedModule}/index.md`, indexContent);
-  // Crear template del módulo
-  const templateContent = `# _TEMPLATE_${selectedModule}\n\n## Title\n\nYour content goes here.`;
-  createFile(`${config.currentPath}/templates/_TEMPLATE_${selectedModule}.md`, templateContent);
-  // Añadir referencia al index.md principal
-  addModuleLink(`${config.currentPath}/index.md`, selectedModule);
+  try {
+    logger.info("Creating a new module...");
 
-  logger.info("Module created successfully.");
+    // Ask for module name
+    const selectedModule = await askModuleName();
+    // Create module folder
+    createDirectory(config.currentPath, selectedModule);
+    // Create index.md for the module
+    const indexContent = '# ' + selectedModule + '\n\nWelcome to the ' + selectedModule + ' section.';
+    createFile(`${config.currentPath}/${selectedModule}/index.md`, indexContent);
+    // Create module template
+    const templateContent = `# _TEMPLATE_${selectedModule}\n\n## Title\n\nYour content goes here.`;
+    createFile(`${config.currentPath}/templates/_TEMPLATE_${selectedModule}.md`, templateContent);
+    // Add reference to the main index.md
+    addModuleLink(`${config.currentPath}/index.md`, selectedModule);
+
+    logger.info(`Module '${selectedModule}' created successfully.`);
+    logger.info(`Template created => ${config.currentPath}/templates/_TEMPLATE_${selectedModule}.md.`);
+    logger.info(`Don't forget to edit the template to add your content.`);
+  
+  } catch (error) {
+    logger.error('Error creating module', error)
+  }
 }
 
 export const runNew = (type: string) => {
-  console.log(`Running 'new' command with type: ${type}`);
   if (type === "doc") {
     newDoc();
   } else if (type === "module") {
     newModule();
   } else {
-    console.log("Unknown type. Please use 'doc' or 'module'.");
+    logger.error("Unknown type. Please use 'doc' or 'module'.");
   }
 }

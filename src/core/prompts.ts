@@ -11,6 +11,6 @@ export const askParameters = async (parameters: string[]) => {
 const askForParameter = async (parameter: string) => {
   return await input({
     message: `${parameter}:`,
-    validate: (input) => input && input != ''
+    default: '',
   });
 }

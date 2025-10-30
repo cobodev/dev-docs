@@ -1,8 +1,14 @@
 import { config } from "../../core/config.js";
+import { logger } from "../../core/logger.js";
 import { getContentFromFile, writeContentToFile } from "../../utils/fs.js";
 
 export const getAvailableModules = (): string[] => {
-  return config.availableModules;
+  try {
+    return config.availableModules;
+  } catch (error) {
+    logger.error('Error getting available modules', error);
+    throw error;
+  }
 }
 
 export const addModuleLink = (indexPath: string, moduleName: string): void => {
@@ -21,8 +27,8 @@ export const addModuleLink = (indexPath: string, moduleName: string): void => {
     }
 
     writeContentToFile(indexPath, content);
-    console.log(`✅ Added link for module "${moduleName}" to ${indexPath}`);
   } catch (error) {
-    console.error('❌ Error creating module link:', error);
+    logger.error('Error creating the links', error);
+    throw error;
   }
 }
