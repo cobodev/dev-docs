@@ -8,9 +8,9 @@ import { logger } from "../../core/logger";
 import { exit } from "../../utils/process";
 
 export const runInit = async () => {
-  logger.info("Initializing a new documentation project...");
-  
   try {
+    logger.info("Initializing a new documentation project...");
+
     if (!isEmptyPath(config.currentPath)) {
       logger.error("The path is not empty. Please choose an empty directory to initialize the documentation project.");
       exit()
@@ -55,5 +55,6 @@ export const runInit = async () => {
   
   } catch (error) {
     logger.error("Error during project initialization", error)
+    exit()
   }
 }

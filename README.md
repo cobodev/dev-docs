@@ -1,60 +1,143 @@
-# DEVDOCS
+# 🚀 DevDocs
 
-- TODO: Create the README.md
+**devdocs** is a lightweight CLI tool for creating, organizing, and maintaining technical documentation in Markdown format — directly from your terminal.
 
+It’s designed for **development teams working on complex projects**, where documenting issues, features, and common errors needs to be **fast, standardized, and collaborative**.
 
-dev-docs/
-├── package.json
-├── tsconfig.json
-├── .gitignore
-├── README.md
-│
-├── defaults/                        # Plantillas y configuraciones base
-│   ├── templates/
-│   │   ├── _TEMPLATE_feature.md
-│   │   ├── _TEMPLATE_issue.md
-│   │   ├── _TEMPLATE_common_error.md
-│   │   └── _TEMPLATE_guide.md
-│   └── config/
-│       ├── default.env
-│       └── config.json
-│
-├── src/
-│   ├── bin/
-│   │   └── cli.ts                   # Punto de entrada principal (registrar comandos)
-│   │
-│   ├── commands/                    # Cada comando tiene su propio módulo
-│   │   ├── init/
-│   │   │   ├── index.ts             # Lógica del comando init
-│   │   │   ├── prompts.ts           # Preguntas relacionadas con init
-│   │   │   └── utils.ts             # Funciones específicas de init
-│   │   │
-│   │   ├── new/
-│   │   │   ├── index.ts             # Lógica del comando new
-│   │   │   ├── prompts.ts           # Preguntas del comando new
-│   │   │   └── utils.ts
-│   │   │
-│   │   └── build/
-│   │       ├── index.ts             # (Ejemplo) comando para regenerar índices o docs
-│   │       └── utils.ts
-│   │
-│   ├── core/                        # Capa transversal del CLI
-│   │   ├── config.ts                # Carga .env + config.json
-│   │   ├── paths.ts                 # Paths globales, resolución de rutas
-│   │   ├── messages.ts              # Mensajes globales con chalk
-│   │   ├── prompts.ts               # Prompts reutilizables
-│   │   └── logger.ts                # Logger centralizado (si quieres más control)
-│   │
-│   ├── utils/                       # Utilidades genéricas (sin dependencias de comandos)
-│   │   ├── fs.ts                    # Funciones de filesystem (copiar, crear carpetas, etc.)
-│   │   ├── markdown.ts              # Funciones de parseo/sustitución de markdown
-│   │   ├── sanitize.ts              # Sanitización de nombres o paths
-│   │   ├── placeholders.ts          # Reemplazo de {{}} y {{@}} 
-│   │   └── date.ts                  # Formateo de fechas y horas
-│   │
-│   └── types/                       # Tipos y modelos TypeScript
-│       ├── config.d.ts
-│       ├── prompts.d.ts
-│       └── common.d.ts
-│
-└── dist/                            # Salida compilada (si usas build con tsc)
+---
+
+## 🚀 Features
+
+- ⚡ **Quick setup** — initialize a documentation workspace in seconds.
+- 🧩 **Predefined templates** for issues, features, errors, and guides.
+- 🔁 **Automatic index generation** for easy navigation.
+- 🪶 **Markdown-based** — works with any editor (VSCode, Obsidian, etc.).
+- 🧠 **Custom placeholders** — dynamic values like `{{title}}` or `{{@date}}`.
+- 🧱 **Structured and extensible** — add your own templates and categories.
+- 🧰 **CLI-based workflow** — no external tools, no vendor lock-in.
+
+---
+
+## 📦 Installation
+
+```bash
+# via npm
+npm install -g dev-docs
+
+# or via yarn
+yarn global add dev-docs
+```
+
+---
+
+## 🧑‍💻 Usage
+
+### Initialize a new documentation workspace
+
+```bash
+dev-docs init
+```
+
+This command creates the basic folder structure (e.g. `/features`, `/issues`, `/guides`, `/common_errors`) and copies the default Markdown templates.
+
+---
+
+### Create a new document
+
+```bash
+dev-docs new doc
+```
+
+Follow the interactive prompts to choose the type (feature, issue, guide, etc.) and fill in details like title and description.
+
+A new `.md` file will be generated automatically with all placeholders replaced.
+
+---
+
+### Create a new module
+
+```bash
+dev-docs new module
+```
+
+Follow the interactive prompts to choose name of the new module.
+
+A new folder and template will be generated.
+
+---
+
+## 📁 Folder Structure
+
+Example after initialization:
+
+```
+docs/
+├── features/
+│   ├── new_auth_flow.md
+│   └── index.md
+├── issues/
+│   ├── api_timeout.md
+│   └── index.md
+├── errors/
+│   ├── db_connection_lost.md
+│   └── index.md
+├── guides/
+│   ├── local_setup.md
+│   └── ...
+└── templates/
+    ├── _TEMPLATE_features.md
+    ├── _TEMPLATE_issues.md
+    ├── _TEMPLATE_errors.md
+    └── _TEMPLATE_guides.md
+```
+
+---
+
+## 🧩 Placeholders
+
+Templates support two types of placeholders:
+
+| Type | Example | Description |
+|------|----------|-------------|
+| Manual | `{{title}}` | Filled by user input |
+| Automatic | `{{@date}}` | Filled automatically (e.g. date, author, etc.) |
+
+Regex ensures placeholders contain only valid identifiers (`{{exampleName}}` ✅ / `{{...}}` ❌).
+
+---
+
+## 🧑‍🔧 Contributing
+
+Pull requests are welcome!  
+If you’d like to add new templates, commands, or configuration options, please open an issue or PR.
+
+Before submitting:
+```bash
+npm run lint
+npm run build
+```
+
+---
+
+## 🧾 License
+
+ISC © 2025 CoboDev
+
+---
+
+## 🌟 Roadmap
+
+- [ ] Command to regenerate indexes automatically  
+- [ ] Template customization via config  
+- [ ] Support for YAML frontmatter  
+- [ ] Integration with git hooks for auto-updating docs  
+
+---
+
+## 🧠 Inspiration
+
+This tool was born from the need to make internal documentation **fast, searchable, and standardized** for complex enterprise projects — without depending on heavy tools like Confluence or Notion.
+
+---
+
+> 💡 *“If it’s not documented, it doesn’t exist.” — every senior developer ever.*
