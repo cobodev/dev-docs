@@ -22,10 +22,10 @@ It’s designed for **development teams working on complex projects**, where doc
 
 ```bash
 # via npm
-npm install -g dev-docs
+npm install -g devdocs
 
 # or via yarn
-yarn global add dev-docs
+yarn global add devdocs
 ```
 
 ---
@@ -35,7 +35,7 @@ yarn global add dev-docs
 ### Initialize a new documentation workspace
 
 ```bash
-dev-docs init
+devdocs init
 ```
 
 This command creates the basic folder structure (e.g. `/features`, `/issues`, `/guides`, `/common_errors`) and copies the default Markdown templates.
@@ -45,7 +45,7 @@ This command creates the basic folder structure (e.g. `/features`, `/issues`, `/
 ### Create a new document
 
 ```bash
-dev-docs new doc
+devdocs new doc
 ```
 
 Follow the interactive prompts to choose the type (feature, issue, guide, etc.) and fill in details like title and description.
@@ -57,7 +57,7 @@ A new `.md` file will be generated automatically with all placeholders replaced.
 ### Create a new module
 
 ```bash
-dev-docs new module
+devdocs new module
 ```
 
 Follow the interactive prompts to choose name of the new module.
@@ -127,7 +127,8 @@ ISC © 2025 CoboDev
 
 ## 🌟 Roadmap
 
-- [ ] Command to regenerate indexes automatically  
+- [ ] Command to regenerate indexes automatically
+- [ ] Command to delete modules or docs  
 - [ ] Template customization via config  
 - [ ] Support for YAML frontmatter  
 - [ ] Integration with git hooks for auto-updating docs  
