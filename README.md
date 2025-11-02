@@ -22,10 +22,7 @@ It’s designed for **development teams working on complex projects**, where doc
 
 ```bash
 # via npm
-npm install -g devdocs
-
-# or via yarn
-yarn global add devdocs
+npm install -g @cobodev/devdocs
 ```
 
 ---
