@@ -50,7 +50,7 @@ export const getContentFromFile = (filePath: string): string => {
     return fs.readFileSync(filePath, 'utf-8');
   } catch (error) {
     logger.error(`Error reading file at ${filePath}: ${error}`);
-    return '';
+    throw error;
   }
 }
 
