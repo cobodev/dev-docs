@@ -1,15 +1,15 @@
-import { logger } from "../core/logger";
-import { getContentFromFile, writeContentToFile } from "./fs";
+import { logger } from '../core/logger';
+import { getContentFromFile, writeContentToFile } from './fs';
 
 export const getUserParameters = (filePath: string) => {
   const regex = /{{(?!@)([a-zA-Z]+[a-zA-Z0-9_]*)}}/g;
   return getParameters(filePath, regex);
-}
+};
 
 export const getAutoParameters = (filePath: string) => {
   const regex = /{{@(.*?)}}/g;
   return getParameters(filePath, regex);
-}
+};
 
 const getParameters = (filePath: string, regex: RegExp) => {
   try {
@@ -24,24 +24,34 @@ const getParameters = (filePath: string, regex: RegExp) => {
     logger.error('Error getting parameters from file.', error);
     return [];
   }
-}
+};
 
-export const replaceUserParameters = (filePath: string, replacements: { [key: string]: string }) => {
+export const replaceUserParameters = (
+  filePath: string,
+  replacements: { [key: string]: string },
+) => {
   replaceParameters(filePath, replacements, false);
-}
+};
 
-export const replaceAutoParameters = (filePath: string, replacements: { [key: string]: string }) => {
+export const replaceAutoParameters = (
+  filePath: string,
+  replacements: { [key: string]: string },
+) => {
   replaceParameters(filePath, replacements, true);
-}
+};
 
-const replaceParameters = (filePath: string, replacements: { [key: string]: string }, auto: boolean) => {
+const replaceParameters = (
+  filePath: string,
+  replacements: { [key: string]: string },
+  auto: boolean,
+) => {
   try {
     let content = getContentFromFile(filePath);
-    
+
     for (const [key, value] of Object.entries(replacements)) {
-      let regex = new RegExp(`{{${key}}}`, "g");
+      let regex = new RegExp(`{{${key}}}`, 'g');
       if (auto) {
-        regex = new RegExp(`{{@${key}}}`, "g");
+        regex = new RegExp(`{{@${key}}}`, 'g');
       }
       content = content.replace(regex, value);
     }
@@ -49,19 +59,19 @@ const replaceParameters = (filePath: string, replacements: { [key: string]: stri
     writeContentToFile(filePath, content);
   } catch (error) {
     logger.error('Error replacing in file:', error);
-    throw error
+    throw error;
   }
-}
+};
 
 export const getAutoAnswers = (parameters: string[]): { [key: string]: string } => {
-  const answers: { [key: string]: string } = {}
-  parameters.forEach(param => {
+  const answers: { [key: string]: string } = {};
+  parameters.forEach((param) => {
     if (param === 'date') {
-      answers[param] = new Date().toISOString().split('T')[0]
+      answers[param] = new Date().toISOString().split('T')[0];
     }
     if (param === 'year') {
-      answers[param] = new Date().getFullYear().toString()
+      answers[param] = new Date().getFullYear().toString();
     }
-  })
-  return answers
-}
+  });
+  return answers;
+};

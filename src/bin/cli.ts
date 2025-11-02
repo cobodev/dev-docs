@@ -1,28 +1,25 @@
 #!/usr/bin/env node
-import { Command } from "commander";
-import { runInit } from "../commands/init/index.js";
-import { runNew } from "../commands/new/index.js";
-import { config } from "../core/config.js";
-import { logger } from "../core/logger.js";
+import { Command } from 'commander';
+import { runInit } from '../commands/init/index.js';
+import { runNew } from '../commands/new/index.js';
+import { config } from '../core/config.js';
+import { logger } from '../core/logger.js';
 
 const program = new Command();
 
-logger.info("=========================================================");
+logger.info('=========================================================');
 
 program
-  .name("devdocs")
-  .description("A CLI tool to manage development documentation.")
+  .name('devdocs')
+  .description('A CLI tool to manage development documentation.')
   .version(config.version);
 
-program
-  .command("init")
-  .description("Initialize a new documentation project.")
-  .action(runInit);
+program.command('init').description('Initialize a new documentation project.').action(runInit);
 
 program
-  .command("new")
-  .argument("[type]", "module | doc", "doc")
-  .description("Create new module or document. Doc by default.")
+  .command('new')
+  .argument('[type]', 'module | doc', 'doc')
+  .description('Create new module or document. Doc by default.')
   .action((type: string) => runNew(type));
 
 program.parse();

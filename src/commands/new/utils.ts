@@ -1,11 +1,11 @@
-import fs from 'node:fs'
-import path from 'node:path'
+import fs from 'node:fs';
+import path from 'node:path';
 import { getContentFromFile, writeContentToFile } from '../../utils/fs';
 
 export const getModules = (dir: string): string[] => {
   try {
     const items = fs.readdirSync(dir);
-    return items.filter(item => {
+    return items.filter((item) => {
       const itemPath = path.join(dir, item);
       const stats = fs.statSync(itemPath);
       return stats.isDirectory() && item !== 'templates';
@@ -14,7 +14,7 @@ export const getModules = (dir: string): string[] => {
     console.error(`Error getting modules: ${error}`);
     return [];
   }
-}
+};
 
 export const addDocLinkToIndex = (indexPath: string, docName: string, title: string): void => {
   try {
@@ -25,4 +25,4 @@ export const addDocLinkToIndex = (indexPath: string, docName: string, title: str
   } catch (error) {
     console.error('Error adding doc link to index:', error);
   }
-}
+};

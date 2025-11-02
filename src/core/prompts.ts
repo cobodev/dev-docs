@@ -1,4 +1,4 @@
-import { input } from "@inquirer/prompts";
+import { input } from '@inquirer/prompts';
 
 export const askParameters = async (parameters: string[]) => {
   const answers: { [key: string]: string } = {};
@@ -6,11 +6,11 @@ export const askParameters = async (parameters: string[]) => {
     answers[param] = await askForParameter(param);
   }
   return answers;
-}
+};
 
 const askForParameter = async (parameter: string) => {
   return await input({
     message: `${parameter}:`,
     default: '',
   });
-}
+};

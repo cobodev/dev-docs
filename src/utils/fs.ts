@@ -1,5 +1,5 @@
-import fs from 'node:fs'
-import path from 'node:path'
+import fs from 'node:fs';
+import path from 'node:path';
 import { logger } from '../core/logger';
 
 export const isEmptyPath = (dir: string): boolean => {
@@ -7,17 +7,19 @@ export const isEmptyPath = (dir: string): boolean => {
     const items = fs.readdirSync(dir);
     return items.length === 0;
   } catch (error) {
+    logger.error(`Error checking if path is empty: ${error}`);
     return false;
   }
-}
+};
 
 export const pathExists = (dir: string): boolean => {
   try {
     return fs.existsSync(dir);
-  } catch (err) {
+  } catch (error) {
+    logger.error(`Error checking if path exists: ${error}`);
     return false;
   }
-}
+};
 
 export const copyFile = (sourceDir: string, destinationDir: string) => {
   try {
@@ -25,7 +27,7 @@ export const copyFile = (sourceDir: string, destinationDir: string) => {
   } catch (error) {
     logger.error(`Error copying file from ${sourceDir} to ${destinationDir}: ${error}`);
   }
-}
+};
 
 export const createFile = (filePath: string, content: string = ''): void => {
   try {
@@ -34,7 +36,7 @@ export const createFile = (filePath: string, content: string = ''): void => {
     logger.error(`Error creating file at ${filePath}: ${error}`);
     throw error;
   }
-}
+};
 
 export const createDirectory = (dir: string, name: string): void => {
   try {
@@ -43,7 +45,7 @@ export const createDirectory = (dir: string, name: string): void => {
     logger.error(`Error creating directory ${name} in ${dir}: ${error}`);
     throw error;
   }
-}
+};
 
 export const getContentFromFile = (filePath: string): string => {
   try {
@@ -52,7 +54,7 @@ export const getContentFromFile = (filePath: string): string => {
     logger.error(`Error reading file at ${filePath}: ${error}`);
     throw error;
   }
-}
+};
 
 export const writeContentToFile = (filePath: string, content: string): void => {
   try {
@@ -61,7 +63,7 @@ export const writeContentToFile = (filePath: string, content: string): void => {
     logger.error(`Error writing to file at ${filePath}: ${error}`);
     throw error;
   }
-}
+};
 
 export const getBlockFromFile = (filePath: string, moduleName: string): string => {
   try {
@@ -74,5 +76,4 @@ export const getBlockFromFile = (filePath: string, moduleName: string): string =
     logger.error(`Error getting block from file ${filePath}:`, error);
     return '';
   }
-}
-
+};

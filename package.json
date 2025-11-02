@@ -7,7 +7,9 @@
     "start": "node dist/bin/cli.js",
     "test": "vitest",
     "test:watch": "vitest --watch",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "lint": "eslint 'src/**/*.ts'",
+    "lint:fix": "eslint 'src/**/*.ts' --fix"
   },
   "bin": {
     "devdocs": "./dist/bin/cli.js"
@@ -22,11 +24,19 @@
     "dotenv": "^17.2.3"
   },
   "devDependencies": {
+    "@eslint/js": "^9.39.0",
     "@types/inquirer": "^9.0.9",
     "@types/node": "^24.9.1",
     "@vitest/coverage-v8": "^4.0.6",
+    "eslint": "^9.39.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.4",
+    "globals": "^16.5.0",
+    "jiti": "^2.6.1",
+    "prettier": "^3.6.2",
     "tsx": "^4.20.6",
     "typescript": "^5.9.3",
+    "typescript-eslint": "^8.46.2",
     "vitest": "^4.0.6"
   }
 }

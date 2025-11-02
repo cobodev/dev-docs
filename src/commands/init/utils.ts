@@ -1,6 +1,6 @@
-import { config } from "../../core/config.js";
-import { logger } from "../../core/logger.js";
-import { getContentFromFile, writeContentToFile } from "../../utils/fs.js";
+import { config } from '../../core/config.js';
+import { logger } from '../../core/logger.js';
+import { getContentFromFile, writeContentToFile } from '../../utils/fs.js';
 
 export const getAvailableModules = (): string[] => {
   try {
@@ -9,7 +9,7 @@ export const getAvailableModules = (): string[] => {
     logger.error('Error getting available modules', error);
     throw error;
   }
-}
+};
 
 export const addModuleLink = (indexPath: string, moduleName: string): void => {
   try {
@@ -31,4 +31,4 @@ export const addModuleLink = (indexPath: string, moduleName: string): void => {
     logger.error('Error creating the links', error);
     throw error;
   }
-}
+};
