@@ -29,7 +29,7 @@ describe('config module', () => {
         defaultAuthor: 'Jane Doe',
         params: { fixed: ['date', 'year'] },
         availableModules: ['issues', 'features'],
-      })
+      }),
     );
 
     const { config } = await import('../../src/core/config');
@@ -49,7 +49,7 @@ describe('config module', () => {
 
     const { config } = await import('../../src/core/config');
 
-    expect(config.defaultAuthor).toBeUndefined();
+    expect(config.defaultAuthor).toBe('');
     expect(config.fixedParams).toEqual([]);
     expect(config.availableModules).toEqual([]);
   });

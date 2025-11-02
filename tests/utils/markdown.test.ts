@@ -1,5 +1,11 @@
 import { describe, it, beforeEach, expect, vi } from 'vitest';
-import { getUserParameters, getAutoParameters, replaceUserParameters, replaceAutoParameters, getAutoAnswers } from '../../src/utils/markdown';
+import {
+  getUserParameters,
+  getAutoParameters,
+  replaceUserParameters,
+  replaceAutoParameters,
+  getAutoAnswers,
+} from '../../src/utils/markdown';
 import { logger } from '../../src/core/logger';
 import * as fsUtils from '../../src/utils/fs';
 
@@ -45,7 +51,10 @@ describe('parameters utils', () => {
 
     const result = getUserParameters(mockFilePath);
     expect(result).toEqual([]);
-    expect(logger.error).toHaveBeenCalledWith('Error getting parameters from file.', expect.any(Error));
+    expect(logger.error).toHaveBeenCalledWith(
+      'Error getting parameters from file.',
+      expect.any(Error),
+    );
   });
 
   it('should extract auto parameters correctly', () => {
@@ -64,7 +73,10 @@ describe('parameters utils', () => {
 
     const result = getAutoParameters(mockFilePath);
     expect(result).toEqual([]);
-    expect(logger.error).toHaveBeenCalledWith('Error getting parameters from file.', expect.any(Error));
+    expect(logger.error).toHaveBeenCalledWith(
+      'Error getting parameters from file.',
+      expect.any(Error),
+    );
   });
 
   it('should replace user parameters correctly in file content', () => {
